@@ -2,12 +2,11 @@
  * File:   main.cpp
  * Author: Victor Alcaraz
  * Created on September 17, 2015, 12:42 PM
- * Purpose: Find the number of modes and frequencies
+ * Purpose: Find the mean, median, and number of modes
  */
 
 //system libraries
 #include <iostream>
-#include <vector>
 using namespace std;
 
 //user libraries
@@ -17,18 +16,18 @@ using namespace std;
 //function prototypes
 void fillAry(int[],int,int);
 void prntAry(int[],int);
-void prntVec(vector<int>&);
 void sortAry(int[],int);
+float mean(int [],int);
+float median(int [],int);
+int mode(int [],int);
 
 //execution begins here
 int main(int argc, char** argv) {
 
     //declare variables
-    int fcount=0,   //frequency
-        mod=20,     //mod number for array
-        mode=0,     //mode count
+    int mod=20,     //mod number for array
         size=50;    //size of array
-    vector<int> freq;    //frequency of numbers
+    int *intptr;
     char choice;    //user choice
     
     do{
@@ -58,43 +57,74 @@ int main(int argc, char** argv) {
     sortAry(numbers,size);
     prntAry(numbers,size);
     
-    for(int i=0;i<size;i++){
-        
-        //if the current number equals the next number, add to frequency
-        if(numbers[i]==numbers[i+1]){
-            fcount++;
-        }else {
-            freq.push_back(fcount);
-            fcount=0;
-        }
-    }
+    cout<<endl;
+    cout<<"The mean of the data is "<<mean(numbers,size)<<endl;
+    cout<<"The median of the data is "<<median(numbers,size)<<endl;
+    cout<<"The number of modes of the data is "<<mode(numbers,size)<<endl;
     
-    prntVec(freq);
-    
-    int max=0;
-    for(int i=0;i<freq.size();i++){
-        if(freq[i]>max){
-            max=freq[i];
-        }
-    }
-    
-    for(int i=0;i<freq.size();i++){
-        if(max==freq[i]){
-            mode++;
-        }
-    }
-    
-    cout<<"Number of Modes is "<<mode<<endl;
+    delete intptr;
     
     return 0;
 }
 
-void prntVec(vector<int>& v){
-    cout<<"Frequency of numbers: "<<endl;
-    for(int i=0;i<v.size();i++){
-        cout<<v.at(i)<<" ";
+float mean(int numbers[],int size){
+    float ave=0;
+    float sum=0.0f;
+    
+    for(int i=0;i<size;i++){
+        sum+=numbers[i];
     }
-    cout<<endl;
+    ave=sum/size;
+    
+    return ave;
+}
+
+float median(int numbers[],int size){
+    int middle;
+    float ave;
+    if(size%2==0){
+        ave=(numbers[(size/2)]+numbers[((size/2)+1)])/2;
+        return ave;
+    }else if(size%2==1){
+        middle=numbers[size/2];
+        return static_cast<float>(middle);
+    }
+}
+
+int mode(int numbers[],int size){
+    int *intptr;
+    intptr=new int[size];
+    
+    int count=0;
+    int max=0;
+    int j=0;
+    int nModes=0;
+    
+    for(int i=0;i<size;i++){
+        if(numbers[i]==numbers[i+1]){
+            count++;
+        }else if(numbers[i]!=numbers[i+1]){
+            if(count>=max){
+                intptr[j]=numbers[i];
+                j++;
+            }
+            count=0;
+        }else cout<<"error1"<<endl;
+    }
+    for(int i=j;i<size;i++){
+        intptr[j]=-1;
+        j++;
+    }
+    
+//    prntAry(intptr,size);
+    
+    for(int i=0;i<size;i++){
+        if(intptr[i]>=0){
+            nModes++;
+        }
+    }
+    
+    return nModes;
 }
 
 void sortAry(int x[],int size){
