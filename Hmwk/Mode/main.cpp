@@ -19,7 +19,7 @@ void prntAry(int[],int);
 void sortAry(int[],int);
 float mean(int [],int);
 float median(int [],int);
-int mode(int [],int);
+int *mode(int [],int);
 
 //execution begins here
 int main(int argc, char** argv) {
@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
     //declare variables
     int mod=20,     //mod number for array
         size=50;    //size of array
-    int *intptr;
+    int *a;
     char choice;    //user choice
     
     do{
@@ -60,9 +60,8 @@ int main(int argc, char** argv) {
     cout<<endl;
     cout<<"The mean of the data is "<<mean(numbers,size)<<endl;
     cout<<"The median of the data is "<<median(numbers,size)<<endl;
-    cout<<"The number of modes of the data is "<<mode(numbers,size)<<endl;
-    
-    delete intptr;
+    cout<<"The number of modes data: "<<endl;
+    *mode(numbers,size);
     
     return 0;
 }
@@ -91,9 +90,7 @@ float median(int numbers[],int size){
     }
 }
 
-int mode(int numbers[],int size){
-    int *intptr;
-    intptr=new int[size];
+int *mode(int numbers[],int size){
     
     int count=0;
     int max=0;
@@ -105,26 +102,30 @@ int mode(int numbers[],int size){
             count++;
         }else if(numbers[i]!=numbers[i+1]){
             if(count>=max){
-                intptr[j]=numbers[i];
-                j++;
+                max=count;
+                nModes++;
             }
             count=0;
         }else cout<<"error1"<<endl;
     }
-    for(int i=j;i<size;i++){
-        intptr[j]=-1;
+    for(int i=0;i<size;i++){
+        if(max==numbers[i]) nModes++;
+    }
+    int nSize=nModes+2;
+    
+//    a=new int[nSize];
+    int a[nSize];
+    a[0]=nModes;
+    a[1]=max;
+    j=0;
+    for(int i=2;i<nSize;i++){
+        a[i]=numbers[j];
         j++;
     }
-    
-//    prntAry(intptr,size);
-    
-    for(int i=0;i<size;i++){
-        if(intptr[i]>=0){
-            nModes++;
-        }
+    for(int i=0;i<nSize;i++){
+        cout<<a[i]<<", ";
     }
-    
-    return nModes;
+    return a;
 }
 
 void sortAry(int x[],int size){
