@@ -8,11 +8,9 @@
 #ifndef SAVEDATA_H
 #define	SAVEDATA_H
 
-struct save{
-    int *wins;
-    int *loses;
-    int *games;
-    int *winPTry;
+struct Save{
+    int *data;  //array with data information {games,wins,loses,average,win 
+                                            // with least amount of tries}
 };
 
 #endif	/* SAVEDATA_H */
