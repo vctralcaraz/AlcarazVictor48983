@@ -1,0 +1,27 @@
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+                             Welcome to Mastermind
+In our game of Mastermind, instead of colors, we utilize numbers. The computer
+becomes the "codemaker", choosing a combination of numbers. You are the
+"codebreaker", trying to crack the code.
+
+Here we have 3 levels of difficulty.
+Easy: numbers range from 1-6 with 4 holes and 12 tries.
+Medium: numbers ranging from 1-6 with 5 holes and 12 tries.
+Hard: numbers range from 1-9 with 6 holes and 8 tries.
+
+You can also choose custom settings for your liking.
+The numbers available range from 1 to the number of your choosing: 
+	(6 minimum: 1-6, 9 maximum: 1-9).
+The amount of holes: (4 minimum, 6 maximum). and
+The number of tries: (6 minimum, 12 maximum).
+
+When you enter a code, enter it in the following format:
+	1234, 12345, or 123456.
+	
+The code you enter must match the exact code from the codemaker. Each time you
+enter your code, you will be notified as to how many colors are correct and how
+many are in the correct spot. For example, you may have entered 1234 for your
+try, and the code is 4321. The codemaker will notify you that you have 4 numbers
+correct but none in the correct spot. You can then take that information to help
+you decipher the code. Try to break the code in as few tries as possible. 
+                                Enjoy your game!
