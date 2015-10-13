@@ -12,13 +12,14 @@ class PersonalInformation {
         string name;
         string address;
         int age;
-        int phone;
+        long long phone;
     public:
         void setName(string);
         void setAdd(string);
         void setAge(int);
-        void setPhne(int);
+        void setPhne(long long);
         void print();
+        string getName(){return name;}
 };
 
 #endif	/* PERSONALINFORMATION_H */

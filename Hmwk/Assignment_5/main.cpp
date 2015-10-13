@@ -97,7 +97,6 @@ void problem2(){
     
     //set all the personal information
     setData(per);
-    
     //print all the personal information
     for(int i=0;i<3;i++){
         per[i].print();
@@ -105,7 +104,6 @@ void problem2(){
     }
     
     delete []per;
-    delete per;
 }
 
 void setData(PersonalInformation *pi){
@@ -113,13 +111,15 @@ void setData(PersonalInformation *pi){
     string name;
     string address;
     int age;
-    int phone;
+    long long phone;
+    bool you=true;
     
     cout<<"Input your information along with 2 references"<<endl;
     for(int i=0;i<3;i++){
-        if(i==0){
+        if(you){
             cout<<"Your name: ";
             getline(cin,name);
+            
             pi[i].setName(name);
             cout<<"Your address: ";
             getline(cin,address);
@@ -132,6 +132,7 @@ void setData(PersonalInformation *pi){
             cin>>phone;
             cin.ignore();
             pi[i].setPhne(phone);
+            you=false;
         }else {
             cout<<"Reference "<<i<<" name: ";
             getline(cin,name);
