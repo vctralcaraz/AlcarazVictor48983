@@ -38,8 +38,8 @@ int main(int argc, char** argv) {
     string pCode;             //player code input
     char dffclty;             //player difficulty input
     bool again=true;          //play again boolean
-    Save s;              //data saved to a structure         
-    s.data=new int [5];      //set the array of structure.
+    Save s;                   //data saved to a structure         
+    s.data=new int [5];       //set the array of structure.
     
     //initialize all the data in the array to 0;
     for(int i=0;i<5;i++){

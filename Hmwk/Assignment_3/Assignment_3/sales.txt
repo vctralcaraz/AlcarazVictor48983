@@ -1,20 +1,20 @@
-East division, quarter 1 sales: $123
-East division, quarter 2 sales: $234
-East division, quarter 3 sales: $3245
-East division, quarter 4 sales: $346
+East division, quarter 1 sales: $65465
+East division, quarter 2 sales: $987654
+East division, quarter 3 sales: $98654
+East division, quarter 4 sales: $5646
 
-West division, quarter 1 sales: $353245
-West division, quarter 2 sales: $2354
-West division, quarter 3 sales: $135423
-West division, quarter 4 sales: $325
+West division, quarter 1 sales: $1
+West division, quarter 2 sales: $2
+West division, quarter 3 sales: $45
+West division, quarter 4 sales: $8
 
-North division, quarter 1 sales: $2342364
-North division, quarter 2 sales: $3254
-North division, quarter 3 sales: $234
-North division, quarter 4 sales: $435
+North division, quarter 1 sales: $96
+North division, quarter 2 sales: $74
+North division, quarter 3 sales: $3856
+North division, quarter 4 sales: $9000
 
-South division, quarter 1 sales: $2345
-South division, quarter 2 sales: $3426
-South division, quarter 3 sales: $3245
-South division, quarter 4 sales: $1435
+South division, quarter 1 sales: $7
+South division, quarter 2 sales: $86
+South division, quarter 3 sales: $900
+South division, quarter 4 sales: $156000
 
