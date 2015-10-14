@@ -12,6 +12,8 @@ using namespace std;
 //user libraries
 #include "Date.h"
 #include "PersonalInformation.h"
+#include "RetailItem.h"
+#include "Inventory.h"
 
 //global constants
 
@@ -33,7 +35,7 @@ int main(int argc, char** argv) {
     
     do{
         //menu
-        cout<<"1. Chapter 13.1\n2. Chapter 13.4\n3. Chapter \n4. Chapter \n"
+        cout<<"1. Chapter 13.1\n2. Chapter 13.4\n3. Chapter 13.5\n4. Chapter 13.6\n"
                 "5. Chapter \n6. Exit\nYour Choice: ";
         cin>>choice;
         cin.ignore();
@@ -63,7 +65,7 @@ int main(int argc, char** argv) {
 
 void problem1(){
     cout<<"Problem 1:"<<endl;
-    cout<<"Gaddis Chapter 13 Problem 1"<<endl;
+    cout<<"Gaddis Chapter 13 Problem 1"<<endl<<endl;
     
     int month;  //month number
     int day;    //day of the month
@@ -75,7 +77,7 @@ void problem1(){
     cin>>month;
     cout<<"Enter the day: ";
     cin>>day;
-    cout<<"Enter the year (xxxx): ";
+    cout<<"Enter the year (yyyy): ";
     cin>>year;
     
     //set date
@@ -85,12 +87,12 @@ void problem1(){
     
     //print date
     yDate.print();
-    cout<<endl;
+    cout<<endl<<endl;
 }
 
 void problem2(){
     cout<<"Problem 2:"<<endl;
-    cout<<"Gaddis Chapter 13 Problem 4"<<endl;
+    cout<<"Gaddis Chapter 13 Problem 4"<<endl<<endl;
     
     //dynamic array of class
     PersonalInformation *per=new PersonalInformation[3];
@@ -133,6 +135,7 @@ void setData(PersonalInformation *pi){
             cin.ignore();
             pi[i].setPhne(phone);
             you=false;
+            cout<<endl;
         }else {
             cout<<"Reference "<<i<<" name: ";
             getline(cin,name);
@@ -148,18 +151,64 @@ void setData(PersonalInformation *pi){
             cin>>phone;
             cin.ignore();
             pi[i].setPhne(phone);
+            cout<<endl;
         }
     }
 }
 
 void problem3(){
     cout<<"Problem 3:"<<endl;
-    cout<<""<<endl;
+    cout<<"Gaddis Chapter 13 Problem 5"<<endl<<endl;
+    
+    //declare variables
+    string des;
+    int unit;
+    float pri;
+    
+    des="Jacket";
+    unit=12;
+    pri=59.95;
+    
+    RetailItem jacket(des,unit,pri);
+    
+    des="Designer Jeans";
+    unit=40;
+    pri=34.95;
+    
+    RetailItem jeans(des,unit,pri);
+    
+    des="Shirt";
+    unit=20;
+    pri=24.95;
+    
+    RetailItem shirt(des,unit,pri);
+    
+    jacket.print();
+    jeans.print();
+    shirt.print();
 }
 
 void problem4(){
     cout<<"Problem 4:"<<endl;
-    cout<<""<<endl;
+    cout<<"Gaddis Chapter 13 Problem 5"<<endl<<endl;
+    
+    int number;
+    int quant;
+    float cost;
+    
+    cout<<"What is the item number?: ";
+    cin>>number;
+    cin.ignore();
+    cout<<"What is the cost of the item?: $";
+    cin>>cost;
+    cin.ignore();
+    cout<<"How many is being purchased?: ";
+    cin>>quant;
+    cin.ignore();
+    
+    Inventory item(number,quant,cost);
+    item.print();
+    cout<<endl;
 }
 
 void problem5(){

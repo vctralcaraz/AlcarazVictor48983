@@ -13,8 +13,8 @@ using namespace std;
 void Date::print(){
     int c;  //user choice
     
-    cout<<"What format do you want to print your date?\n1. 12/25/2012\n2. "
-            "December 25, 2012\n3. 25 December 2012\n";
+    cout<<"What format do you want to print your date?\n1. mm/dd/yyyy\n2. "
+            "Month Day, Year\n3. Day Month Year\n";
     cout<<"Your choice: ";
     cin>>c;
     cin.ignore();
