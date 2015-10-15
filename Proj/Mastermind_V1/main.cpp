@@ -41,7 +41,6 @@ int main(int argc, char** argv) {
     bool again=true;          //play again boolean
     Save s;                   //data saved to a structure         
     s.data=new int [5];       //set the array of structure.
-    
     //initialize all the data in the array to 0;
     for(int i=0;i<5;i++){
         *(s.data+i)=0;
@@ -116,13 +115,21 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
     int nTry=t;    //number of tries performed
     int pCount=0;  //number of numbers correct and in position
     int nCount=0;  //number of numbers correct but not in position
-    
+    bool valid;
+
     //2D Array board
     char board[t][h];
     for(int i=0;i<t;i++){
         for(int j=0;j<h;j++){
-            board[i][j]=165;
-            if(j<h) cout<<' ';
+            board[i][j]=145;
+        }
+    }
+    
+    //2D array validation
+    string correct[t][2];
+    for(int i=0;i<t;i++){
+        for(int j=0;j<2;j++){
+            correct[i][j]="T";
         }
     }
     
@@ -143,21 +150,33 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
         cout<<nTry<<" tries remaining"<<endl;
         
         for(int i=0;i<t;i++){
+            cout<<"        ";
             for(int j=0;j<h;j++){
-                cout<<board[i][j];
+                cout<<board[i][j]<<" ";
+            }
+            for(int k=0;k<2;k++){
+                
             }
             cout<<endl;
         }
         
-        
         do{
+            valid=true;
             cout<<"What is your guess?: ";
-            cin>>guess;
-            cin.ignore();
+            getline(cin,guess);
             if(guess.size()!=h){
                 cout<<"Incomplete Code. Re-enter your code: ";
+                valid=false;
             }
-        }while(guess.size()!=h);
+            else{
+                for(int i=0;i<h;i++){
+                    if(!isdigit(guess[i])){
+                        valid=false;
+                    }
+                }
+                if(!valid) cout<<"You didn't enter a digit"<<endl;
+            }
+        }while(!valid);
         nTry--; //decrement after every guess
         
         //set the guess to the board
@@ -194,6 +213,8 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
         }
         cout<<pCount<<" numbers in the correct spot"<<endl;
         cout<<nCount<<" numbers correct but not in the right spot"<<endl;
+        
+        //if player cracked the code, output win message.
         if(pCount==h){
             cout<<"You have cracked the code! Nice Job!"<<endl;
             win=true;
@@ -201,6 +222,15 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
     
     }while(!win && nTry>0);
     
+    //output the answer
+    cout <<"Answer: ";
+    for(int i=0;i <h;i++){
+        cout <<code [i];
+    }
+    cout<<endl;
+    cout<<"Your Final guess: "<<guess<<endl<<endl;
+    
+    //if the player did not win, output lose message.
     if(!win){
         cout<<"Sorry, you lost! You have reached your try limit. Please Try"
                 "Again."<<endl;

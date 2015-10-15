@@ -22,6 +22,15 @@ The code you enter must match the exact code from the codemaker. Each time you
 enter your code, you will be notified as to how many colors are correct and how
 many are in the correct spot. For example, you may have entered 1234 for your
 try, and the code is 4321. The codemaker will notify you that you have 4 numbers
-correct but none in the correct spot. You can then take that information to help
-you decipher the code. Try to break the code in as few tries as possible. 
+correct but none in the correct spot. That information will be represent with
+X's and O's. 
+
+O's represent correct numbers in correct positions.
+X's represent correct numbers in incorrect positions.
+
+OO XX shows 2 numbers correct in position, 2 numbers correct out of position.
+O XX  shows 1 number correct in position, 2 numbers correct out of position.
+
+You can then take that information to help you decipher the code. Try to break
+the code in as few tries as possible. All your game data will get saved.
                                 Enjoy your game!
