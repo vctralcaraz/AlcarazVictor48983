@@ -28,9 +28,9 @@ X's and O's.
 O's represent correct numbers in correct positions.
 X's represent correct numbers in incorrect positions.
 
-OO XX shows 2 numbers correct in position, 2 numbers correct out of position.
-O XX  shows 1 number correct in position, 2 numbers correct out of position.
+OOXX shows 2 numbers correct in position, 2 numbers correct out of position.
+OXX  shows 1 number correct in position, 2 numbers correct out of position.
 
 You can then take that information to help you decipher the code. Try to break
-the code in as few tries as possible. All your game data will get saved.
+the code in as few tries as possible. Duplicate Numbers are allowed.
                                 Enjoy your game!

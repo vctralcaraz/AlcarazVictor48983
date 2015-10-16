@@ -115,7 +115,8 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
     int nTry=t;    //number of tries performed
     int pCount=0;  //number of numbers correct and in position
     int nCount=0;  //number of numbers correct but not in position
-    bool valid;
+    bool valid;    //boolean if the guess is valid
+    bool range;    //boolean if a digit is in range
 
     //2D Array board
     char board[t][h];
@@ -126,17 +127,24 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
     }
     
     //2D array validation
-    string correct[t][2];
+    int correct[t][2];
     for(int i=0;i<t;i++){
         for(int j=0;j<2;j++){
-            correct[i][j]="T";
+            correct[i][j]=0;
+        }
+    }
+    //2D parallel array for validation - output on board
+    string valBrd[t][2];
+    for(int i=0;i<t;i++){
+        for(int j=0;j<2;j++){
+            valBrd[i][j]="T";
         }
     }
     
     int *code=new int[h];
     //get the answer
     for(int i=0;i<h;i++){
-        a=rand()%m;
+        a=rand()%m+1;
         code[i]=a;
 //        cout<<code[i];
     }
@@ -154,14 +162,17 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
             for(int j=0;j<h;j++){
                 cout<<board[i][j]<<" ";
             }
-            for(int k=0;k<2;k++){
-                
+            for(int j=0;j<2;j++){
+                if(valBrd[i][j]!="T"){
+                    cout<<valBrd[i][j];
+                }
             }
             cout<<endl;
         }
         
         do{
             valid=true;
+            range=true;
             cout<<"What is your guess?: ";
             getline(cin,guess);
             if(guess.size()!=h){
@@ -176,12 +187,23 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
                 }
                 if(!valid) cout<<"You didn't enter a digit"<<endl;
             }
+            for(int i=0;i<h;i++){
+                if(guess[i]<'1' || guess[i]>m+48){
+                    valid=false;
+                    range=false;
+                }
+            }
+            if(!valid && !range){
+                cout<<"One of your digits was less than greater than the number"
+                        " range"<<endl;
+            }
+            
         }while(!valid);
         nTry--; //decrement after every guess
         
         //set the guess to the board
-        for(int i = 0; i < h; i++){
-            board[nTry][i] = guess[i];
+        for(int i=0;i<h;i++){
+            board[nTry][i]=guess[i];
         }
         
         //create a boolean parallel array to check off a number that has been
@@ -211,9 +233,24 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
                 }
             }
         }
-        cout<<pCount<<" numbers in the correct spot"<<endl;
-        cout<<nCount<<" numbers correct but not in the right spot"<<endl;
-        
+//        cout<<pCount<<" numbers in the correct spot"<<endl;
+//        cout<<nCount<<" numbers correct but not in the right spot"<<endl;
+        //set the correct to the board
+        for(int i=0;i<pCount;i++){
+            correct[nTry][0]+=1;
+        }
+        for(int i=0;i<nCount;i++){
+            correct[nTry][1]+=1;
+        }
+        for(int i=0;i<correct[nTry][0];i++){
+            if(i==0) valBrd[nTry][0]="O";
+            else valBrd[nTry][0]+="O";
+        }
+        for(int i=0;i<correct[nTry][1];i++){
+            if(i==0) valBrd[nTry][1]="X";
+            else valBrd[nTry][1]+="X";
+        }
+        cout<<endl;
         //if player cracked the code, output win message.
         if(pCount==h){
             cout<<"You have cracked the code! Nice Job!"<<endl;
@@ -257,6 +294,7 @@ void hardshp(bool &x,unsigned short &m,unsigned short &h,unsigned short &t){
         cout<<"Choose your difficulty:\n[E]asy, [M]edium, [H]ard, or [C]ustom"
                 <<endl<<"[X] to exit (uppercase 'X' only)"<<endl;
         cin>>d;   //difficulty input
+        cin.ignore();
         cout<<endl;
 
         //if the input isn't valid output the statement
@@ -291,6 +329,7 @@ void hardshp(bool &x,unsigned short &m,unsigned short &h,unsigned short &t){
             do{
                 cout<<"What do you want your number range be? 1-";
                 cin>>m;
+                cin.ignore();
                 if(m<6 || m>9){
                     cout<<"Please enter a number of from 6 to 9"<<endl;
                 }
@@ -298,6 +337,7 @@ void hardshp(bool &x,unsigned short &m,unsigned short &h,unsigned short &t){
             do{
                 cout<<"How many holes do you want?: ";
                 cin>>h;
+                cin.ignore();
                 if(h<4 || h>6){
                     cout<<"Please enter a number of holes from 4 to 6"
                             <<endl;
@@ -306,6 +346,7 @@ void hardshp(bool &x,unsigned short &m,unsigned short &h,unsigned short &t){
             do{
                 cout<<"How many tries do you want to have?: ";
                 cin>>t;
+                cin.ignore();
                 if(t<6 || t>12){
                     cout<<"Please enter a number of tries from 6 to 12"
                             <<endl;
