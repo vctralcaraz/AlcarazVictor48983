@@ -194,8 +194,8 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
                 }
             }
             if(!valid && !range){
-                cout<<"One of your digits was less than greater than the number"
-                        " range"<<endl;
+                cout<<"One of your digits was less than or greater than the"
+                        " number range"<<endl;
             }
             
         }while(!valid);
