@@ -1,3 +1,3 @@
-build/Debug/Cygwin_4.x-Windows/main.o: main.cpp SaveData.h
+build/Debug/Cygwin_4.x-Windows/main.o: main.cpp user.h
 
-SaveData.h:
+user.h:

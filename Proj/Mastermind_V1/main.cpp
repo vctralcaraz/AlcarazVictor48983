@@ -14,15 +14,16 @@
 using namespace std;
 
 //user libraries
-#include "SaveData.h"
+#include "user.h"
 
 //global constants
 
 //function prototypes
 void inst(string &);
 void hardshp(bool &,unsigned short &,unsigned short &,unsigned short &);
-void game(int *,unsigned short &,unsigned short &,unsigned short &);
-void board();
+void game(unsigned short &,unsigned short &,unsigned short &);
+void uValid(string &,User *, unsigned int &);
+void data();
 
 //execution begins here
 int main(int argc, char** argv) {
@@ -39,12 +40,11 @@ int main(int argc, char** argv) {
     string pCode;             //player code input
     char dffclty;             //player difficulty input
     bool again=true;          //play again boolean
-    Save s;                   //data saved to a structure         
-    s.data=new int [5];       //set the array of structure.
-    //initialize all the data in the array to 0;
-    for(int i=0;i<5;i++){
-        *(s.data+i)=0;
-    }
+    string name="";           //player name
+    User *player=new User[10];//allocate memory for 10 users
+    unsigned int uloc;        //user index
+    
+    uValid(name,player,uloc);
     
     //game information variables
     unsigned short mod;       //number range
@@ -62,38 +62,114 @@ int main(int argc, char** argv) {
         if(again){    //check if the player is playing game
             
             //play the game
-            game(s.data,mod,holes,tries);
+            game(mod,holes,tries);
             
-        }else cout<<"Thank you for playing"<<endl;
+        }else cout<<"Thank you for playing, "<<name<<"!"<<endl;
     }while(again);  //play again if again is true or else the game is over
     
-    delete []s.data;
     return 0;
 }
 
 /*******************************************************************************
- *                                 board                                       *
+ *                                 uValid                                      *
  *******************************************************************************
- * purpose: to display the board after every guess
- * input:
- *      g -> guess
- *      h -> number of holes
- *      t -> number of tries
- * output:
- *      board
+ * purpose: to validate users of the game
+ * input-output:
+ *      u -> user name goes in blank, goes out full
  ******************************************************************************/
-void board(int h,int t){
+void uValid(string &n,User *p,unsigned int &l){
+    char chce;                //user choice [y]/[n]
+    bool find=false;          //username found
+    bool newUser=true;        //new user boolean
+    bool again=true;          //again boolean
     
-    
-    for(int i=0;i<t;i++){
-        for(int j=0;j<h;j++){
-            if(j==0) cout<<"        ";
-//            if()
-            cout<<'O';
-            if(j<h) cout<<' ';
-        }
+    //select/create user
+    do{
+        cout<<"Are you a returning player? [Y]/[N]: ";
+        cin>>chce;
+        cin.ignore();
         cout<<endl;
+        if(chce!='Y' && chce!='y' && chce!='N' && chce!='n'){
+            cout<<"You did not enter a [Y] or [N]"<<endl<<endl;
+        }
+    }while(chce!='Y' && chce!='y' && chce!='N' && chce!='n');
+    
+    if(chce=='Y' || chce=='y'){
+        newUser=false;
+        do{
+            cout<<"What is your username? (case-sensitive): ";
+            cin>>n;
+            cin.ignore();
+            cout<<endl;
+
+            for(int i=0;i<10;i++){
+                if(p[i].name==n){
+                    find=true;
+                    l=i;
+                    again=false;
+                }
+            }
+
+            if(!find){
+                cout<<"We do not have that username on file."<<endl;
+                do{
+                    cout<<"Would you like to try again? [Y]/[N]"<<endl;
+                    cout<<"Entering [N] will prompt you to create a new"
+                            " username"<<endl;
+                    cin>>chce;
+                    cin.ignore();
+                    cout<<endl;
+                    if(chce!='Y' && chce!='y' &&
+                       chce!='N' && chce!='n'){
+                        cout<<"You did not enter a [Y] or [N]"<<endl<<endl;
+                    }
+                }while(chce!='Y' && chce!='y' &&
+                       chce!='N' && chce!='n');
+                
+                if(chce=='N' || chce=='n'){
+                    newUser=true;
+                    again=false;
+                }else again=true;
+            }
+        }while(again);
+        
+        if(find){
+            cout<<"Welcome back, "<<p[l].name<<"!"<<endl;
+        }
     }
+    do{
+        if(newUser){
+            cout<<"Please enter a username. (case-sensitive): ";
+            cin>>n;
+            cin.ignore();
+            cout<<endl;
+
+            do{
+                cout<<"You have entered "<<n<<". Is this correct? [Y]/[N]: ";
+                cin>>chce;
+                cin.ignore();
+                cout<<endl;
+                if(chce!='Y' && chce!='y' && chce!='N' && chce!='n'){
+                    cout<<"You did not enter a [Y] or [N]"<<endl<<endl;
+                }
+            }while(chce!='Y' && chce!='y' && chce!='N' && chce!='n');
+
+            if(chce=='Y' || chce=='y'){
+                for(int i=0;i<10;i++){
+                    if(p[i].name==""){
+                        p[i].name=n;
+                        l=i;
+                        again=false;
+                    }
+                }
+                cout<<"Welcome, "<<p[l].name<<"!"<<endl;
+            }else{
+                again=true;
+            }
+        }
+    }while(again);
+    
+    cout<<endl;
 }
 
 /*******************************************************************************
@@ -107,12 +183,12 @@ void board(int h,int t){
  * input-output:
  *      s->data -> array of structure
  ******************************************************************************/
-void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
+void game(unsigned short &m,unsigned short &h,unsigned short &t){
     //declare variables
     int a;         //answer generated by the cpu
     string guess;  //player guess
     bool win=false;//win or lose boolean
-    int nTry=t;    //number of tries performed
+    int nTry=t;    //number of tries remaining
     int pCount=0;  //number of numbers correct and in position
     int nCount=0;  //number of numbers correct but not in position
     bool valid;    //boolean if the guess is valid
@@ -253,7 +329,8 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
         cout<<endl;
         //if player cracked the code, output win message.
         if(pCount==h){
-            cout<<"You have cracked the code! Nice Job!"<<endl;
+            cout<<"You have cracked the code in "<<t-nTry<<" tries! Nice Job!"
+                    <<endl;
             win=true;
         }
     
@@ -269,8 +346,8 @@ void game(int *s,unsigned short &m,unsigned short &h,unsigned short &t){
     
     //if the player did not win, output lose message.
     if(!win){
-        cout<<"Sorry, you lost! You have reached your try limit. Please Try"
-                "Again."<<endl;
+        cout<<"Sorry, you lost! You have run out of tries. Please Try"
+                " Again."<<endl;
     }
     
     delete []code;
