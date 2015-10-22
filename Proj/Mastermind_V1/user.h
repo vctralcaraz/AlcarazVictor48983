@@ -1,8 +1,8 @@
 /* 
  * File:   user.h
- * Author: rcc
- *
+ * Author: Victor Alcaraz
  * Created on October 20, 2015, 1:09 PM
+ * Purpose: usernames
  */
 
 #ifndef USER_H
@@ -15,4 +15,3 @@ struct User{
 };
 
 #endif	/* USER_H */
-

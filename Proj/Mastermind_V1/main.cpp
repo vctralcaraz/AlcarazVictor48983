@@ -15,15 +15,17 @@ using namespace std;
 
 //user libraries
 #include "user.h"
+#include "save.h"
 
 //global constants
 
 //function prototypes
 void inst(string &);
 void hardshp(bool &,unsigned short &,unsigned short &,unsigned short &);
-void game(unsigned short &,unsigned short &,unsigned short &);
-void uValid(string &,User *, unsigned int &);
-void data();
+void game(unsigned short &,unsigned short &,unsigned short &,unsigned int,Save *);
+void uValid(string &,User *, unsigned int &,Save *);
+void oData(User *,Save *);
+void iData(User *,Save *);
 
 //execution begins here
 int main(int argc, char** argv) {
@@ -33,7 +35,6 @@ int main(int argc, char** argv) {
     
     //declare variables
     
-    ofstream save;  //output stream of saved data
     string temp;    //temporary string variable
     
     //player game variables
@@ -42,16 +43,17 @@ int main(int argc, char** argv) {
     bool again=true;          //play again boolean
     string name="";           //player name
     User *player=new User[10];//allocate memory for 10 users
+    Save *uData=new Save[10]; //allocate memory for 10 user's data
     unsigned int uloc;        //user index
-    
-    uValid(name,player,uloc);
     
     //game information variables
     unsigned short mod;       //number range
     unsigned short holes;     //number of holes
     unsigned short tries;     //number of tries
     
-    inst(temp); // rules/instructions
+    iData(player,uData);            //read saved data from file
+    inst(temp);                     // rules/instructions
+    uValid(name,player,uloc,uData); //user validation
     
     //loop for the game
     do{
@@ -62,12 +64,82 @@ int main(int argc, char** argv) {
         if(again){    //check if the player is playing game
             
             //play the game
-            game(mod,holes,tries);
-            
+            game(mod,holes,tries,uloc,uData);
+            oData(player,uData);
         }else cout<<"Thank you for playing, "<<name<<"!"<<endl;
     }while(again);  //play again if again is true or else the game is over
     
+    delete []player;
+    delete []uData;
     return 0;
+}
+
+/*******************************************************************************
+ *                                 oData                                       *
+ *******************************************************************************
+ * purpose: to save data to file
+ * input:
+ *      p -> array of structure of user name
+ *      d -> user data
+ ******************************************************************************/
+void iData(User *,Save *){
+    ifstream r; //input stream of saved data
+    r.open("data.txt", ios::in | ios::binary);
+    char ch;
+    
+    while(r.read(&ch,sizeof(ch))){
+        cout<<ch<<endl;
+    }
+    
+    r.close();
+}
+
+/*******************************************************************************
+ *                                 oData                                       *
+ *******************************************************************************
+ * purpose: to save data to file
+ * input:
+ *      p -> array of structure of user name
+ *      d -> user data
+ ******************************************************************************/
+void oData(User *p,Save *d){
+    ofstream s;  //output stream of saved usernames
+    
+    char sp=' ';
+    char nl=10;
+    
+    s.open("data.txt", ios::out | ios::binary);
+    
+    for(int i=0;i<10;i++){
+        for(int j=0;j<p[i].name.size();j++){
+            s.write(&p[i].name[j],sizeof(p[i].name[j]));
+            s.write(&sp,sizeof(sp));
+        }
+        s.write(reinterpret_cast<char *>(&d[i].games),sizeof(d[i].games));
+        s.write(&sp,sizeof(sp));
+        s.write(reinterpret_cast<char *>(&d[i].wins),sizeof(d[i].wins));
+        s.write(&sp,sizeof(sp));
+        s.write(reinterpret_cast<char *>(&d[i].loses),sizeof(d[i].loses));
+        s.write(&sp,sizeof(sp));
+        s.write(reinterpret_cast<char *>(&d[i].average),sizeof(d[i].average));
+        s.write(&sp,sizeof(sp));
+        s.write(reinterpret_cast<char *>(&d[i].lTries),sizeof(d[i].lTries));
+        s.write(&sp,sizeof(sp));
+        s.write(&nl,sizeof(nl));
+                
+        
+        
+        if(p[i].name!=""){
+            cout<<p[i].name<<endl;
+            cout<<d[i].games<<endl;
+            cout<<d[i].wins<<endl;
+            cout<<d[i].loses<<endl;
+            cout<<d[i].average<<endl;
+            cout<<d[i].lTries<<endl;
+        }
+    }
+    
+    s.close();
 }
 
 /*******************************************************************************
@@ -75,9 +147,11 @@ int main(int argc, char** argv) {
  *******************************************************************************
  * purpose: to validate users of the game
  * input-output:
- *      u -> user name goes in blank, goes out full
+ *      p -> user name goes in blank, goes out full
+ *      l -> user location
+ *      d -> user data
  ******************************************************************************/
-void uValid(string &n,User *p,unsigned int &l){
+void uValid(string &n,User *p,unsigned int &l,Save *d){
     char chce;                //user choice [y]/[n]
     bool find=false;          //username found
     bool newUser=true;        //new user boolean
@@ -137,8 +211,8 @@ void uValid(string &n,User *p,unsigned int &l){
             cout<<"Welcome back, "<<p[l].name<<"!"<<endl;
         }
     }
-    do{
-        if(newUser){
+    if(newUser){
+        do{
             cout<<"Please enter a username. (case-sensitive): ";
             cin>>n;
             cin.ignore();
@@ -155,19 +229,30 @@ void uValid(string &n,User *p,unsigned int &l){
             }while(chce!='Y' && chce!='y' && chce!='N' && chce!='n');
 
             if(chce=='Y' || chce=='y'){
-                for(int i=0;i<10;i++){
-                    if(p[i].name==""){
-                        p[i].name=n;
-                        l=i;
-                        again=false;
-                    }
-                }
+                while(p[l].name=="" && l<9)l++;
+                p[l].name=n;
+                again=false;
+//                for(int i=0;i<10;i++){
+//                    if(p[i].name==""){
+//                        p[i].name=n;
+//                        l=i;
+//                        again=false;
+//                        break;
+//                    }
+//                }
                 cout<<"Welcome, "<<p[l].name<<"!"<<endl;
             }else{
                 again=true;
             }
-        }
-    }while(again);
+        }while(again);
+        
+        d[l].games=0;
+        d[l].wins=0;
+        d[l].loses=0;
+        d[l].lTries=20;
+        d[l].average=0;
+    }
+    
     
     cout<<endl;
 }
@@ -183,7 +268,7 @@ void uValid(string &n,User *p,unsigned int &l){
  * input-output:
  *      s->data -> array of structure
  ******************************************************************************/
-void game(unsigned short &m,unsigned short &h,unsigned short &t){
+void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,Save *d){
     //declare variables
     int a;         //answer generated by the cpu
     string guess;  //player guess
@@ -332,9 +417,14 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t){
             cout<<"You have cracked the code in "<<t-nTry<<" tries! Nice Job!"
                     <<endl;
             win=true;
+            d[l].wins+=1;
+            if((t-nTry)<d[l].lTries) d[l].lTries=(t-nTry);
         }
     
     }while(!win && nTry>0);
+    
+    d[l].games+=1;
+    d[l].average=(d[l].wins/d[l].games);
     
     //output the answer
     cout <<"Answer: ";
@@ -348,7 +438,9 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t){
     if(!win){
         cout<<"Sorry, you lost! You have run out of tries. Please Try"
                 " Again."<<endl;
+        d[l].loses+=1;
     }
+    
     
     delete []code;
 }
@@ -464,4 +556,5 @@ void inst(string &temp){
         cout<<temp;
     }
     rules.close(); //closing the file
+    cout<<endl<<endl;
 }
