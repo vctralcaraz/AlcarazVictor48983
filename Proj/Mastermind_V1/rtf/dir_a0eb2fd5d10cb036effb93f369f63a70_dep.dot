@@ -1,0 +1,13 @@
+digraph "F:/AlcarazVictor_48983/Proj" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_2600a0409e4f442d39ed99ff7a45e31a {
+    graph [ bgcolor="#ddddee", pencolor="black", label="AlcarazVictor_48983" fontname="Helvetica", fontsize="10", URL="dir_2600a0409e4f442d39ed99ff7a45e31a.html"]
+  subgraph clusterdir_a0eb2fd5d10cb036effb93f369f63a70 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_a0eb2fd5d10cb036effb93f369f63a70.html"];
+    dir_a0eb2fd5d10cb036effb93f369f63a70 [shape=plaintext label="Proj"];
+    dir_d060115b35114828fb38f4ab376dde5f [shape=box label="Mastermind_V1" color="black" fillcolor="white" style="filled" URL="dir_d060115b35114828fb38f4ab376dde5f.html"];
+  }
+  }
+}

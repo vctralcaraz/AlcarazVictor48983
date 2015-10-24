@@ -11,6 +11,7 @@
 #include <ctime>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 //user libraries
@@ -26,6 +27,7 @@ void game(unsigned short &,unsigned short &,unsigned short &,unsigned int,Save *
 void uValid(string &,User *, unsigned int &,Save *);
 void oData(User *,Save *);
 void iData(User *,Save *);
+void showDta(User *,Save *,unsigned int &);
 
 //execution begins here
 int main(int argc, char** argv) {
@@ -44,7 +46,7 @@ int main(int argc, char** argv) {
     string name="";           //player name
     User *player=new User[10];//allocate memory for 10 users
     Save *uData=new Save[10]; //allocate memory for 10 user's data
-    unsigned int uloc;        //user index
+    unsigned int uloc=0;      //user index
     
     //game information variables
     unsigned short mod;       //number range
@@ -57,6 +59,7 @@ int main(int argc, char** argv) {
     
     //loop for the game
     do{
+        showDta(player,uData,uloc); //show user data
         unsigned short pTries=0;  //number of tries player has attempted\
             
         hardshp(again,mod,holes,tries); //getting game difficulty
@@ -65,32 +68,66 @@ int main(int argc, char** argv) {
             
             //play the game
             game(mod,holes,tries,uloc,uData);
+            
+            //save data
             oData(player,uData);
         }else cout<<"Thank you for playing, "<<name<<"!"<<endl;
     }while(again);  //play again if again is true or else the game is over
     
+    //deallocate memory and exit program
     delete []player;
     delete []uData;
     return 0;
 }
 
 /*******************************************************************************
- *                                 oData                                       *
+ *                                showDta                                      *
  *******************************************************************************
- * purpose: to save data to file
+ * purpose: to show user data
+ * input:
+ *      p -> array of structure of user name
+ *      d -> user data
+ *      l -> user location to show appropriate data
+ ******************************************************************************/
+void showDta(User *p,Save *d,unsigned int &l){
+    cout<<"Here is your data:"<<endl;
+    cout<<"Games Played:         "<<d[l].games<<endl;
+    cout<<"Games Won:            "<<d[l].wins<<endl;
+    cout<<"Games Lost:           "<<d[l].loses<<endl;
+    cout<<"Win Percentage:      %"<<setprecision(4)<<d[l].average<<endl;
+    cout<<"Win with Least Tries: "<<d[l].lTries<<endl;
+    cout<<endl;
+}
+
+/*******************************************************************************
+ *                                 iData                                       *
+ *******************************************************************************
+ * purpose: to save data to program
  * input:
  *      p -> array of structure of user name
  *      d -> user data
  ******************************************************************************/
-void iData(User *,Save *){
+void iData(User *p,Save *d){
     ifstream r; //input stream of saved data
-    r.open("data.txt", ios::in | ios::binary);
-    char ch;
+    ifstream q; //input stream of username
+    string temp="";
+    char c;
     
-    while(r.read(&ch,sizeof(ch))){
-        cout<<ch<<endl;
+    r.open("data.txt", ios::in | ios::binary);
+    q.open("unames.txt");
+    
+    int a=0;
+    while(getline(q,temp)){
+        p[a].name=temp;
+        a++;
     }
     
+    q.close();
+    
+    for(int i=0;i<10 && r;i++){
+        r.read(reinterpret_cast<char *>(&d[i]),sizeof(Save));
+    }
+        
     r.close();
 }
 
@@ -104,41 +141,22 @@ void iData(User *,Save *){
  ******************************************************************************/
 void oData(User *p,Save *d){
     ofstream s;  //output stream of saved usernames
+    ofstream q;  //output stream of structured data
     
     char sp=' ';
     char nl=10;
     
-    s.open("data.txt", ios::out | ios::binary);
+    s.open("unames.txt");
+    q.open("data.txt", ios::out | ios::binary);
     
     for(int i=0;i<10;i++){
-        for(int j=0;j<p[i].name.size();j++){
-            s.write(&p[i].name[j],sizeof(p[i].name[j]));
-            s.write(&sp,sizeof(sp));
-        }
-        s.write(reinterpret_cast<char *>(&d[i].games),sizeof(d[i].games));
-        s.write(&sp,sizeof(sp));
-        s.write(reinterpret_cast<char *>(&d[i].wins),sizeof(d[i].wins));
-        s.write(&sp,sizeof(sp));
-        s.write(reinterpret_cast<char *>(&d[i].loses),sizeof(d[i].loses));
-        s.write(&sp,sizeof(sp));
-        s.write(reinterpret_cast<char *>(&d[i].average),sizeof(d[i].average));
-        s.write(&sp,sizeof(sp));
-        s.write(reinterpret_cast<char *>(&d[i].lTries),sizeof(d[i].lTries));
-        s.write(&sp,sizeof(sp));
-        s.write(&nl,sizeof(nl));
-                
-        
-        
         if(p[i].name!=""){
-            cout<<p[i].name<<endl;
-            cout<<d[i].games<<endl;
-            cout<<d[i].wins<<endl;
-            cout<<d[i].loses<<endl;
-            cout<<d[i].average<<endl;
-            cout<<d[i].lTries<<endl;
+            s<<p[i].name<<endl;
         }
+        q.write(reinterpret_cast<char *>(&d[i]),sizeof(Save));
     }
     
+    q.close();
     s.close();
 }
 
@@ -175,9 +193,10 @@ void uValid(string &n,User *p,unsigned int &l,Save *d){
             cin>>n;
             cin.ignore();
             cout<<endl;
-
+            cout<<"Searching..."<<endl;
             for(int i=0;i<10;i++){
                 if(p[i].name==n){
+                    cout<<"Username found!"<<endl;
                     find=true;
                     l=i;
                     again=false;
@@ -229,7 +248,11 @@ void uValid(string &n,User *p,unsigned int &l,Save *d){
             }while(chce!='Y' && chce!='y' && chce!='N' && chce!='n');
 
             if(chce=='Y' || chce=='y'){
-                while(p[l].name=="" && l<9)l++;
+                int a=0;
+                cout<<"Saving Username..."<<endl;
+                while(p[l].name!="" && l<9){
+                    l++;
+                }
                 p[l].name=n;
                 again=false;
 //                for(int i=0;i<10;i++){
@@ -331,16 +354,20 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,S
             cout<<endl;
         }
         
-        do{
+        do{  //do-while of validation
             valid=true;
             range=true;
             cout<<"What is your guess?: ";
-            getline(cin,guess);
-            if(guess.size()!=h){
+            getline(cin,guess);       //user guess
+            
+            //validation of code length representing number of holes
+            if(guess.size()!=h){      
                 cout<<"Incomplete Code. Re-enter your code: ";
                 valid=false;
             }
             else{
+                
+                //validation of each index of the string is a digit
                 for(int i=0;i<h;i++){
                     if(!isdigit(guess[i])){
                         valid=false;
@@ -348,6 +375,8 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,S
                 }
                 if(!valid) cout<<"You didn't enter a digit"<<endl;
             }
+            
+            //validation of number range with appropriate range.
             for(int i=0;i<h;i++){
                 if(guess[i]<'1' || guess[i]>m+48){
                     valid=false;
@@ -394,8 +423,7 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,S
                 }
             }
         }
-//        cout<<pCount<<" numbers in the correct spot"<<endl;
-//        cout<<nCount<<" numbers correct but not in the right spot"<<endl;
+
         //set the correct to the board
         for(int i=0;i<pCount;i++){
             correct[nTry][0]+=1;
@@ -417,14 +445,17 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,S
             cout<<"You have cracked the code in "<<t-nTry<<" tries! Nice Job!"
                     <<endl;
             win=true;
+            
+            //update wins and check least amount of tries if win
             d[l].wins+=1;
             if((t-nTry)<d[l].lTries) d[l].lTries=(t-nTry);
         }
     
     }while(!win && nTry>0);
     
+    //update games and average
     d[l].games+=1;
-    d[l].average=(d[l].wins/d[l].games);
+    d[l].average=(static_cast<float>(d[l].wins)/d[l].games)*100;
     
     //output the answer
     cout <<"Answer: ";
@@ -438,6 +469,7 @@ void game(unsigned short &m,unsigned short &h,unsigned short &t,unsigned int l,S
     if(!win){
         cout<<"Sorry, you lost! You have run out of tries. Please Try"
                 " Again."<<endl;
+        //update losses if loss
         d[l].loses+=1;
     }
     
