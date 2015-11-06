@@ -7,6 +7,8 @@
 
 //system libraries
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 //user libraries
@@ -14,6 +16,7 @@ using namespace std;
 #include "PersonalInformation.h"
 #include "RetailItem.h"
 #include "Inventory.h"
+#include "Coin.h"
 
 //global constants
 
@@ -28,6 +31,9 @@ void problem5();
 //execution
 int main(int argc, char** argv) {
 
+    //random number seed
+    srand(static_cast<int>(time(0)));
+    
     //declare user input for menu
     int choice;
     
@@ -36,7 +42,7 @@ int main(int argc, char** argv) {
     do{
         //menu
         cout<<"1. Chapter 13.1\n2. Chapter 13.4\n3. Chapter 13.5\n4. Chapter 13.6\n"
-                "5. Chapter \n6. Exit\nYour Choice: ";
+                "5. Chapter 13.12\n6. Exit\nYour Choice: ";
         cin>>choice;
         cin.ignore();
         cout<<endl;
@@ -213,5 +219,19 @@ void problem4(){
 
 void problem5(){
     cout<<"Problem 5:"<<endl;
-    cout<<""<<endl;
+    cout<<"Gaddis Chapter 13 Problem 12"<<endl;
+    
+    //variables
+    int rNum;
+    Coin coin;
+    
+    cout<<"\nCoin Toss Simulator\n";
+    for(int i=1;i<=20;i++){
+        rNum=rand()%2+1;
+        coin.toss(rNum);
+        cout<<"Toss No. "<<i<<":\t"<<coin.getSide()<<endl;
+    }
+    
+    cout<<"Total Heads: "<<coin.getHCnt()<<endl;
+    cout<<"Total Tails: "<<coin.getTCnt()<<endl;
 }

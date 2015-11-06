@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Coin.o \
 	${OBJECTDIR}/Date.o \
 	${OBJECTDIR}/Inventory.o \
 	${OBJECTDIR}/PersonalInformation.o \
@@ -65,6 +66,11 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/assignment_5.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/assignment_5 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Coin.o: Coin.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Coin.o Coin.cpp
 
 ${OBJECTDIR}/Date.o: Date.cpp 
 	${MKDIR} -p ${OBJECTDIR}

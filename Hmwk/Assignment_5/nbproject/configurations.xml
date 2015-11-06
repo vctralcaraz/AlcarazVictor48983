@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Coin.h</itemPath>
       <itemPath>Date.h</itemPath>
       <itemPath>Inventory.h</itemPath>
       <itemPath>PersonalInformation.h</itemPath>
@@ -16,6 +17,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Coin.cpp</itemPath>
       <itemPath>Date.cpp</itemPath>
       <itemPath>Inventory.cpp</itemPath>
       <itemPath>PersonalInformation.cpp</itemPath>
@@ -44,6 +46,10 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="Coin.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Coin.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Date.h" ex="false" tool="3" flavor2="0">
@@ -83,6 +89,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Coin.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Coin.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Date.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Date.h" ex="false" tool="3" flavor2="0">
